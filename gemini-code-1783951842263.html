@@ -5,90 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#2DC0AE">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BirdLife">
-<title>BirdLife Tracker - Fotografia de Aves</title>
-<link rel="icon" href="logo.jpg">
-<link rel="apple-touch-icon" href="logo.jpg">
+<title>BirdLife Tracker</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{
-  --primary:#2DC0AE; --dark:#1E3A6E; --accent:#FF8C69;
-  --bg:#EDF8F7; --surface:#FFFFFF; --text:#1A2F5A; --muted:#6B7A8D;
-  --border:#D5EBE9; --success:#2DB37A; --warning:#F0A500; --danger:#E05252;
-}
-/* Estilos mantidos da estrutura robusta original */
-body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
-.hidden { display: none !important; }
-#appHeader { background: var(--primary); color: white; padding: 20px; text-align: center; }
-.card { background: var(--surface); padding: 15px; border-radius: 12px; margin: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid var(--border); border-radius: 8px; box-sizing: border-box; }
+:root{ --primary:#2DC0AE; --bg:#EDF8F7; --text:#1A2F5A; }
+body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+.card { background: white; padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
 button { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+h1 { text-align: center; color: var(--primary); }
 </style>
 </head>
 <body>
 
-<div id="splash" style="text-align:center; padding-top:50px;">
-    <h1>BirdLife Tracker 🦅</h1>
-    <button onclick="iniciarApp()">Começar Registro</button>
+<h1>BirdLife Tracker 🦅</h1>
+
+<div class="card">
+    <h3>Novo Avistamento</h3>
+    <input type="text" id="especie" placeholder="Nome da Espécie">
+    <input type="text" id="local" placeholder="Localização">
+    <input type="text" id="equipamento" placeholder="Equipamento (Câmera/Lente)">
+    <input type="file" accept="image/*" capture="environment">
+    <button onclick="salvar()">Salvar Registo</button>
 </div>
 
-<div id="appHeader" class="hidden">
-    <h2>Meus Avistamentos</h2>
-</div>
-
-<div id="mainContent" class="hidden">
-    <div class="card">
-        <h3>Novo Avistamento</h3>
-        <input type="text" id="birdName" placeholder="Espécie (Nome Popular)">
-        <input type="text" id="birdLoc" placeholder="Localização">
-        <input type="text" id="birdGear" placeholder="Equipamento/Configuração">
-        <input type="file" accept="image/*" capture="environment" id="birdPhoto">
-        <button onclick="salvarAvistamento()">Salvar Registro</button>
-    </div>
-    
-    <div id="listaAvistamentos"></div>
-</div>
+<div id="lista"></div>
 
 <script>
-// Lógica robusta de inicialização
-function iniciarApp() {
-    localStorage.setItem('birdlife_entered', 'true');
-    document.getElementById('splash').classList.add('hidden');
-    document.getElementById('appHeader').classList.remove('hidden');
-    document.getElementById('mainContent').classList.remove('hidden');
-}
-
-function salvarAvistamento() {
+function salvar() {
     const registro = {
-        id: Date.now(),
-        especie: document.getElementById('birdName').value,
-        local: document.getElementById('birdLoc').value,
-        gear: document.getElementById('birdGear').value,
+        especie: document.getElementById('especie').value,
+        local: document.getElementById('local').value,
         data: new Date().toLocaleDateString()
     };
-    
-    // Salva no LocalStorage do navegador
-    let lista = JSON.parse(localStorage.getItem('meus_avistamentos') || '[]');
+    let lista = JSON.parse(localStorage.getItem('aves') || '[]');
     lista.push(registro);
-    localStorage.setItem('meus_avistamentos', JSON.stringify(lista));
-    
-    alert("Avistamento registrado com sucesso!");
+    localStorage.setItem('aves', JSON.stringify(lista));
+    alert("Avistamento guardado!");
     location.reload();
 }
-
-// Verifica se já entrou anteriormente
-window.addEventListener('DOMContentLoaded', () => {
-    if(localStorage.getItem('birdlife_entered')){
-        iniciarApp();
-    }
-});
-
-// PWA Service Worker (Mantido para funcionalidade offline)
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-}
 </script>
-
 </body>
 </html>
