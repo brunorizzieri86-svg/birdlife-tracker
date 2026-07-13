@@ -1,9 +1,0 @@
-{
-  "name": "BirdLife Tracker",
-  "short_name": "BirdLife",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#EDF8F7",
-  "theme_color": "#2DC0AE",
-  "icons": [ { "src": "logo.jpg", "sizes": "192x192", "type": "image/jpeg" } ]
-}
